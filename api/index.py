@@ -1,3 +1,4 @@
+```python
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 import pandas as pd
@@ -11,10 +12,12 @@ DATA_PATH = os.path.join(
     "raw_data.csv"
 )
 
+
 @app.get("/", response_class=HTMLResponse)
 def home():
     df = pd.read_csv(DATA_PATH)
 
+    # Find the default/payment-default column
     target = next(
         col for col in df.columns
         if "default" in col.lower()
@@ -24,6 +27,8 @@ def home():
     default_rate = df[target].mean() * 100
     avg_credit = df["LIMIT_BAL"].mean()
     avg_age = df["AGE"].mean()
+    default_customers = (df[target] == 1).sum()
+    non_default_customers = (df[target] == 0).sum()
 
     return f"""
     <html>
@@ -31,14 +36,21 @@ def home():
         <title>Credit Risk Dashboard</title>
         <style>
             body {{
-                font-family: Arial;
+                font-family: Arial, sans-serif;
                 background: #f5f7fa;
                 padding: 40px;
             }}
+
+            h1 {{
+                color: #222;
+            }}
+
             .cards {{
                 display: flex;
                 gap: 20px;
+                flex-wrap: wrap;
             }}
+
             .card {{
                 background: white;
                 padding: 25px;
@@ -46,6 +58,7 @@ def home():
                 width: 200px;
                 box-shadow: 0 2px 8px #ccc;
             }}
+
             .value {{
                 font-size: 28px;
                 font-weight: bold;
@@ -55,7 +68,7 @@ def home():
 
     <body>
 
-                                                 rd</h1>
+        <h1>Credit Risk Dashboard</h1>
 
         <p>Big Data Analytics for Credit Risk Assessment</p>
 
@@ -68,7 +81,7 @@ def home():
 
             <div class="card">
                 <h3>⚠️ Default Rate</h3>
-                <div class="value">{default        f}%</div>
+                <div class="value">{default_rate:.2f}%</div>
             </div>
 
             <div class="card">
@@ -77,14 +90,25 @@ def home():
             </div>
 
             <div class="card">
-                <h3>🎂                 <h3                  <h3>🎂     ">{avg_age:.1f}</div>
-            </d            </d            </d                   </d       Risk Analysis</h2>
+                <h3>🎂 Average Age</h3>
+                <div class="value">{avg_age:.1f}</div>
+            </div>
+
+        </div>
+
+        <h2>Risk Analysis</h2>
 
         <p>
             Default customers:
-            <strong>{(df[target] == 1).sum():,}</strong>
+            <strong>{default_customers:,}</strong>
         </p>
 
         <p>
-            Non-default cu                        rong>{    target]             Non-default cu                        rong>/html>
+            Non-default customers:
+            <strong>{non_default_customers:,}</strong>
+        </p>
+
+    </body>
+    </html>
     """
+
