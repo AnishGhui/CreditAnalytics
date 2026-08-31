@@ -1,4 +1,3 @@
-```python
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
@@ -17,6 +16,7 @@ def home():
                 font-family: Arial, sans-serif;
                 background: #f5f7fa;
                 padding: 40px;
+                margin: 0;
                 text-align: center;
             }
 
@@ -42,16 +42,11 @@ def home():
                 color: green;
                 font-weight: bold;
             }
-        </style>
-    </head>
-
-    <body>
+        </styl        </styl        </y>
         <div class="card">
             <h1>Credit Risk Dashboard</h1>
 
-            <p class="success">
-                ✓ FastAPI application is working!
-            </p>
+            <p cla            <p cla            <p clastAPI a    cation i                       </p>
 
             <p>
                 Big Data Analytics for Credit Risk Assessment
@@ -60,4 +55,3 @@ def home():
     </body>
     </html>
     """
-```
